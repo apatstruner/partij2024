@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Festival Timetable</title>
+    <title>OUD EN NIEUW TIMETABLE - 2024</title>
     <style>
         @font-face {
             font-family: 'IntegralCF';
@@ -22,17 +22,18 @@
             overflow-x: hidden; /* Prevents horizontal scroll */
         }
         h1 {
+            position: relative; /* Added to enable z-index */
             line-height: 50px;
             margin-top: 20px;
             font-size: 4em;
             color: #ff55a5;
             text-transform: uppercase;
-            z-index: 2;
+            z-index: 3; /* Increased z-index */
             text-align: center; /* Center the text */
         }
         .timetable-container {
             position: relative;
-            margin: 50px auto;
+            margin: 20px auto; /* Reduced margin */
             width: 90%;
             max-width: 1000px;
             padding: 20px;
@@ -75,7 +76,7 @@
             top: 0;
             right: 0;
             width: 300px; /* Adjust as necessary */
-            height: 100%;
+            height: 100vh; /* Changed to span full viewport height */
             background-image: url('side.png'); /* Use your image from docroot */
             background-repeat: no-repeat;
             background-size: cover;
