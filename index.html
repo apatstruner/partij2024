@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Festival Timetable</title>
+    <style>
+        @font-face {
+            font-family: 'IntegralCF';
+            src: url('font.woff') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'IntegralCF', sans-serif;
+            background: #3b1a84;
+            color: #fff;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* Prevents horizontal scroll */
+        }
+        h1 {
+            line-height: 50px;
+            margin-top: 20px;
+            font-size: 4em;
+            color: #ff55a5;
+            text-transform: uppercase;
+            z-index: 2;
+            text-align: center; /* Center the text */
+        }
+        .timetable-container {
+            position: relative;
+            margin: 50px auto;
+            width: 90%;
+            max-width: 1000px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            z-index: 2;
+        }
+        .event {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 85, 165, 0.2);
+            padding: 15px;
+            border-bottom: 3px solid #ff55a5;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            font-size: 1.5em;
+        }
+        .time {
+            font-size: 1.8em;
+            color: #ff55a5;
+            font-weight: bold;
+        }
+        .event-name {
+            font-size: 1em;
+            color: #fff;
+        }
+        .current-time-line {
+            position: absolute;
+            width: 100%;
+            height: 5px;
+            background: #ff3300;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+        .background-overlay {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px; /* Adjust as necessary */
+            height: 100%;
+            background-image: url('side.png'); /* Use your image from docroot */
+            background-repeat: no-repeat;
+            background-size: cover;
+            z-index: 1;
+            opacity: 0.9; /* Slight transparency to blend it better */
+        }
+        .new {
+            text-align: left;
+            color: white;
+        }
+        .old {
+            text-align: left;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div class="background-overlay"></div>
+<div>
+    <h1><span class="old">OUD</span><br><span class="new">NIEUW</span><span class="amper">&</span></h1>
+</div>
+<div class="timetable-container" id="timetable">
+    <!-- Events will be loaded here dynamically -->
+    <div class="current-time-line" id="time-line"></div>
+</div>
+
+<script>
+    // Sample JSON data with events and times
+    const events = [
+        { time: "10:00", name: "Groep 1" },
+        { time: "12:00", name: "Groep 2" },
+        { time: "14:00", name: "pauze" },
+        { time: "16:00", name: "Groep 3" },
+        { time: "18:00", name: "Groep 4" },
+        { time: "20:00", name: "pubquiz" }
+    ];
+
+    // Function to load events into the timetable
+    function loadEvents() {
+        const timetableContainer = document.getElementById("timetable");
+        events.forEach(event => {
+            const eventDiv = document.createElement("div");
+            eventDiv.className = "event";
+            eventDiv.innerHTML = `
+                    <div class="time">${event.time}</div>
+                    <div class="event-name">${event.name}</div>
+                `;
+            timetableContainer.appendChild(eventDiv);
+        });
+    }
+
+    // Function to move the current time line
+    function updateCurrentTimeLine() {
+        const now = new Date();
+        const hours = now.getHours();
+        const minutes = now.getMinutes();
+        const totalMinutes = (hours * 60) + minutes;
+
+        const timetableHeight = document.getElementById("timetable").offsetHeight;
+        const startTime = 10 * 60; // 10:00 in minutes
+        const endTime = 20 * 60;   // 20:00 in minutes
+        const totalFestivalMinutes = endTime - startTime;
+
+        const currentPercentage = ((totalMinutes - startTime) / totalFestivalMinutes) * 100;
+        const timeLine = document.getElementById("time-line");
+        timeLine.style.top = `${currentPercentage}%`;
+    }
+
+    // Initialize the timetable and start updating the line position
+    loadEvents();
+    updateCurrentTimeLine();
+    setInterval(updateCurrentTimeLine, 60000); // Update every minute
+
+</script>
+
+</body>
+</html>
