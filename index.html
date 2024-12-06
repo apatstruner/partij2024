@@ -129,22 +129,34 @@
         });
     }
 
-    // Function to move the current time line
-    function updateCurrentTimeLine() {
-        const now = new Date();
-        const hours = now.getHours();
-        const minutes = now.getMinutes();
-        const totalMinutes = (hours * 60) + minutes;
+// Function to move the current time line
+function updateCurrentTimeLine() {
+    const now = new Date();
+    const isDecember31 = now.getMonth() === 11 && now.getDate() === 31; // Check if it's December 31
 
-        const timetableHeight = document.getElementById("timetable").offsetHeight;
-        const startTime = 10 * 60; // 10:00 in minutes
-        const endTime = 20 * 60;   // 20:00 in minutes
-        const totalFestivalMinutes = endTime - startTime;
+    const timeLine = document.getElementById("time-line");
 
-        const currentPercentage = ((totalMinutes - startTime) / totalFestivalMinutes) * 100;
-        const timeLine = document.getElementById("time-line");
-        timeLine.style.top = `${currentPercentage}%`;
+    if (!isDecember31) {
+        // Hide the red line if it's not December 31
+        timeLine.style.visibility = "hidden";
+        return;
     }
+
+    // Show the red line if it's December 31
+    timeLine.style.visibility = "visible";
+
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    const totalMinutes = (hours * 60) + minutes;
+
+    const timetableHeight = document.getElementById("timetable").offsetHeight;
+    const startTime = 10 * 60; // 10:00 in minutes
+    const endTime = 20 * 60;   // 20:00 in minutes
+    const totalFestivalMinutes = endTime - startTime;
+
+    const currentPercentage = ((totalMinutes - startTime) / totalFestivalMinutes) * 100;
+    timeLine.style.top = `${currentPercentage}%`;
+}
 
     // Initialize the timetable and start updating the line position
     loadEvents();
